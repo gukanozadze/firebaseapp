@@ -1,8 +1,10 @@
 package com.example.guka.firebaseapp
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
@@ -30,6 +32,9 @@ class ChatLogActivity : AppCompatActivity() {
 
         send_edittext_button.setOnClickListener{
             performSendMessage()
+            // Hide Keyboard
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
     }
 
