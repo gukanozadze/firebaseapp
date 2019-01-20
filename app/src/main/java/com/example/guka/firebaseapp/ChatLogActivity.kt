@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -17,7 +14,6 @@ import kotlinx.android.synthetic.main.chat_to_row.view.*
 import org.jetbrains.anko.toast
 
 class ChatLogActivity : AppCompatActivity() {
-    val TAG = "GUKAA"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,30 +22,15 @@ class ChatLogActivity : AppCompatActivity() {
         supportActionBar?.title = "Chat"
         val adapter = GroupAdapter<ViewHolder>()
 
-        // Listen for messages
-        listenForMessages()
+        adapter.add(ChatFromItem("FROM MESSAGE ...."))
+        adapter.add(ChatToItem("To Mesasge lmao go away fuck u"))
+
         recyclerview_chat_log.adapter = adapter
 
 
         send_edittext_button.setOnClickListener{
             performSendMessage()
         }
-    }
-
-    fun listenForMessages(){
-        val ref = FirebaseFirestore.getInstance().collection("messages")
-        ref.addSnapshotListener(EventListener<QuerySnapshot> { snapshot, e ->
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e)
-                return@EventListener
-            }
-
-            if (snapshot != null) {
-                Log.d(TAG, "Current data: " + snapshot)
-            } else {
-                Log.d(TAG, "Current data: null")
-            }
-        })
     }
 
     class ChatMessage(val id: String, val text: String, val fromId: String, val toId: String, val timeStamp: Long){
