@@ -67,6 +67,7 @@
                     android:inputType="textEmailAddress"
                     android:focusable="true"/>
 
+
             <EditText
                     android:id="@+id/edit_text_signIn_password"
                     android:layout_width="match_parent"
@@ -87,15 +88,6 @@
                     android:background="@drawable/button_rounded_corners"
                     android:textColor="@color/colorPrimary"/>
 
-
-            <com.google.android.gms.common.SignInButton
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/google_sign_in_button"
-                    android:layout_width="match_parent"
-                    android:gravity="center"
-                    android:layout_height="50dp"
-                    app:buttonSize="wide"/>
-
             <TextView
                     android:id="@+id/dont_have_account_sign_up"
                     android:layout_margin="20dp"
@@ -106,5 +98,13 @@
                     android:textColor="@drawable/clicked_background"
                     android:text="Don't Have Account? Sign Up"/>
         </LinearLayout>
+
+        <ProgressBar
+                android:id="@+id/progressBarLogin"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+        />
     </LinearLayout>
 </ScrollView>

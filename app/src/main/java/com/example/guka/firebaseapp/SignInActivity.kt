@@ -1,7 +1,8 @@
 package com.example.guka.firebaseapp
 
+import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,12 +12,18 @@ import kotlinx.android.synthetic.main.activity_sign_in.*
 import android.view.animation.AnimationUtils.loadAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_register.*
+import org.jetbrains.anko.indeterminateProgressDialog
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
+import java.time.LocalDateTime
+import java.util.*
 
 
 class SignInActivity : AppCompatActivity() {
@@ -26,8 +33,7 @@ class SignInActivity : AppCompatActivity() {
     public override fun onStart() {
         super.onStart()
         if (user != null) {
-            val intent = Intent(applicationContext, MainActivity::class.java)
-            startActivity(intent)
+            startActivity<LatestMessagesActivity>()
         }
     }
 
@@ -41,15 +47,19 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
+
         // Click on SignIn Button
         signInButton.setOnClickListener{
+
+            // Hide Keyboard
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
             performLogin()
         }
 
         // Link to RegisterActivity
         dont_have_account_sign_up.setOnClickListener{
-            val intent = Intent(applicationContext, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity<RegisterActivity>()
         }
 
         // Logo Animation
@@ -61,26 +71,27 @@ class SignInActivity : AppCompatActivity() {
         val password = edit_text_signIn_password.text.toString()
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT).show()
+            toast("Please Fill In All Fields")
             return
         }
+
+        //  Anko Progress bar
+        val progressDialog = indeterminateProgressDialog("Logging In")
 
         val auth = FirebaseAuth.getInstance()
 
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(baseContext, "Authentication Successful", Toast.LENGTH_SHORT).show()
-                    Log.d("Main", "Success", task.exception)
-                    val user = auth.currentUser
-                    val intent = Intent(applicationContext, MainActivity::class.java)
-                    startActivity(intent)
 
+                    // Stop ProgressBar + Link to Main Activity
+                    progressDialog.dismiss()
+                    startActivity<MainActivity>()
                 }
             }.addOnFailureListener { it ->
-                Log.d("Main", "Failed to create user: ${it.message}")
-                Toast.makeText(baseContext, "${it.message}", Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+                toast("${it.message}")
+                Log.d("LoginUser", "Failed to create user: ${it.message}")
             }
     }
 }

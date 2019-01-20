@@ -14,12 +14,11 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         <LinearLayout
                 android:id="@+id/signup_fireBaseLayout"
                 android:layout_width="match_parent"
                 android:gravity="center"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_height="100dp">
 
             <TextView
@@ -86,13 +85,6 @@
                     android:background="@drawable/button_rounded_corners"
                     android:textColor="@color/colorPrimary"/>
 
-            <com.google.android.gms.common.SignInButton
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/google_sign_in_button"
-                    android:layout_width="match_parent"
-                    android:gravity="center"
-                    android:layout_height="50dp"
-                    app:buttonSize="wide"/>
 
             <TextView
                     android:id="@+id/already_have_account_sign_in"
@@ -104,5 +96,15 @@
                     android:text="Already Have Account? Sign In"
             />
         </LinearLayout>
+
+        <ProgressBar
+                android:id="@+id/progressBarRegister"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+        />
     </LinearLayout>
+
+
 </ScrollView>
